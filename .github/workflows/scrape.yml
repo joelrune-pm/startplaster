@@ -24,12 +24,15 @@ jobs:
       - name: Scrape prices
         run: python scrape.py
 
+      - name: Generate chart
+        run: MPLBACKEND=Agg python plot.py
+
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git diff --quiet && echo "No new data" || (
-            git add data/prices.csv &&
+            git add data/prices.csv data/prices.png &&
             git commit -m "scrape $(date -u +%Y-%m-%d)" &&
             git push
           )
